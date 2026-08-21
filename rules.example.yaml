@@ -1,0 +1,129 @@
+# Copy to rules.yaml and edit. Everything the sales side cares about lives here:
+# what counts as a good lead, what gets said, and when a call can be booked.
+
+business:
+  name: "Northgate Automation"
+  agent_name: "Alex"
+  phone: "+1 415 555 0110"
+  owner_channel: "sales@northgate.example"     # where hot leads are announced
+  default_country_code: "+1"                   # for phone numbers typed without one
+
+  # When the e-mail field is unusable (typo, empty) but a phone number is there,
+  # text them instead of dropping the lead.
+  sms_fallback_when_email_invalid: true
+  sms_fallback: |
+    Hi {first_name}, {agent} from {business}. We got your enquiry but the e-mail
+    address did not go through - reply here and I'll send everything by text.
+
+office_hours:
+  start: 9                 # 09:00 local
+  end: 17                  # last slot before 17:00
+  slot_minutes: 30
+  earliest_after_minutes: 60   # do not offer a call in the next hour
+  workdays: [0, 1, 2, 3, 4]    # Monday=0 ... Sunday=6
+
+tiers:                     # score thresholds
+  hot: 60
+  warm: 30
+
+scoring:
+  budget_threshold: 2000
+  detailed_message_chars: 120
+
+  # Words that usually mean "ready to buy".
+  buying_signals:
+    - quote
+    - pricing
+    - proposal
+    - how much
+    - urgent
+    - asap
+    - this week
+    - get started
+    - onboard
+
+  # Words that usually mean this is not a customer.
+  disqualifiers:
+    - looking for a job
+    - my cv
+    - resume
+    - guest post
+    - backlink
+    - seo services for you
+    - partnership opportunity
+    - increase your traffic
+
+  points:
+    buying_signal: 30
+    budget_over_threshold: 25
+    business_email: 15
+    has_phone: 15
+    detailed_message: 10
+    company_named: 10
+    disqualifier: -60
+
+playbooks:
+  hot:
+    subject: "Re: {company} - let's get you a quote"
+    reply: |
+      Hi {first_name},
+
+      Thanks for reaching out - I read your message and this is something we do
+      often, so I can get you a straight answer quickly.
+
+      I have kept these times open for a 20-minute call:
+      {slots}
+
+      Reply with whichever suits and I will send an invite. If it is easier,
+      call me directly on {phone}.
+
+      {agent}
+      {business}
+    sms: |
+      Hi {first_name}, {agent} from {business} here - got your enquiry and can
+      talk today. Times: {slots_inline}. Reply with one and I'll confirm.
+    offer_slots: 3
+    notify_owner: true
+    crm_stage: "Qualified - call offered"
+    assign_to: "owner"
+
+  warm:
+    subject: "Re: your enquiry - two quick questions"
+    reply: |
+      Hi {first_name},
+
+      Thanks for getting in touch. To point you at the right option I need two
+      things: roughly what volume you are dealing with, and when you would want
+      this live.
+
+      If it is easier to talk it through, here are some open times:
+      {slots}
+
+      {agent}
+      {business}
+    offer_slots: 2
+    notify_owner: false
+    crm_stage: "Needs qualification"
+    assign_to: "sales_queue"
+
+  cold:
+    subject: "Thanks for your message"
+    reply: |
+      Hi {first_name},
+
+      Thanks for writing in. I have added your details and someone will follow
+      up shortly. If your question is time-sensitive, reply here and say so -
+      that pushes it up the queue.
+
+      {agent}
+      {business}
+    offer_slots: 0
+    notify_owner: false
+    crm_stage: "Nurture"
+
+  ignore:
+    # No reply, no notification: unsolicited pitches and job applications
+    # are filed and forgotten, which is the whole point of scoring them.
+    offer_slots: 0
+    notify_owner: false
+    crm_stage: "Filtered"

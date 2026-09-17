@@ -1,5 +1,7 @@
 # lead-responder
 
+[![CI](https://github.com/dkautomation23/lead-responder/actions/workflows/ci.yml/badge.svg)](https://github.com/dkautomation23/lead-responder/actions/workflows/ci.yml)
+
 Answers an inbound lead **in under a second** — scores it, writes a personal
 reply, offers real call slots, escalates the good ones and quietly files the
 job applications and SEO pitches.

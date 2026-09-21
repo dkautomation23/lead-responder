@@ -43,12 +43,12 @@ the whole thing safely.
 ```console
 $ python respond.py samples/lead_hot.json
 
-Dana Ruiz <dana.ruiz@meridian-logistics.com>  Meridian Logistics
+Dana Ruiz <dana.ruiz@meridian-logistics.example>  Meridian Logistics
   tier   : HOT  (100/100, decided in 0.09 ms)
   because: buying signal: 'quote'; budget 6000 >= 2000; phone provided;
            business domain (meridian-logistics.com); detailed message; company named
   slots  : Mon 24 Aug, 09:00, Mon 24 Aug, 09:30, Mon 24 Aug, 10:00
-  -> email   dana.ruiz@meridian-logistics.com
+  -> email   dana.ruiz@meridian-logistics.example
        | Hi Dana,
        |
        | Thanks for reaching out - I read your message and this is something we do
@@ -78,7 +78,7 @@ And on someone who mistyped their address:
 Marta Kelly <marta.kelly(at)brightside.example>  Brightside Retail
   tier   : WARM  (55/100)
   because: buying signal: 'pricing'; phone provided; email looks invalid; company named
-  -> sms     +35315558842   (e-mail address is unusable)
+  -> sms     +442079460958   (e-mail address is unusable)
   -> notify  sales@northgate.example
        | Marta Kelly left a broken e-mail - reached out by SMS. Worth a call.
 ```

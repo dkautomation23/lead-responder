@@ -369,7 +369,7 @@ def selftest(rules: dict) -> int:
         if not condition:
             failures.append(label)
 
-    hot = handle({"name": "Dana Ruiz", "email": "dana@meridian-logistics.com", "phone": "+1 415 555 0134",
+    hot = handle({"name": "Dana Ruiz", "email": "dana@meridian-logistics.example", "phone": "+1 415 555 0134",
                   "company": "Meridian Logistics", "budget": "about 6k",
                   "message": "We need a quote for automating our daily order export. Fairly urgent."}, rules)
     check("hot lead is tier hot", hot["tier"] == "hot")
@@ -378,10 +378,10 @@ def selftest(rules: dict) -> int:
     check("hot lead pings the owner", any(a["type"] == "notify" for a in hot["actions"]))
     check("reply is personalised", "Dana" in hot["actions"][0]["body"])
 
-    cold = handle({"name": "sam", "email": "sam@gmail.com", "message": "how much?"}, rules)
+    cold = handle({"name": "sam", "email": "sam@example.com", "message": "how much?"}, rules)
     check("thin lead is not hot", cold["tier"] in {"warm", "cold"})
 
-    job = handle({"name": "Applicant", "email": "a@gmail.com",
+    job = handle({"name": "Applicant", "email": "a@example.com",
                   "message": "I am looking for a job, sending my CV and resume."}, rules)
     check("job application is ignored", job["tier"] == "ignore")
     check("ignored lead triggers no email", not any(a["type"] == "email" for a in job["actions"]))
@@ -405,7 +405,7 @@ def selftest(rules: dict) -> int:
     check("slots skip the weekend", all("Sat" not in s and "Sun" not in s for s in slots))
     check("slots start inside office hours", slots and int(slots[0].split(", ")[1][:2]) >= rules["office_hours"]["start"])
 
-    speed = handle({"email": "x@corp.com", "message": "pricing"}, rules)["decided_in_ms"]
+    speed = handle({"email": "x@example.com", "message": "pricing"}, rules)["decided_in_ms"]
     check("decision is fast", speed < 50)
 
     print(f"selftest: {checks - len(failures)}/{checks} passed")
